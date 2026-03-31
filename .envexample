@@ -1,0 +1,24 @@
+# Environment Variables
+
+# === API Keys ===
+TAVILY_API_KEY=""
+# HF_TOKEN
+HF_TOKEN=""
+# === Pinecone ===
+PINECONE_API_KEY=""
+PINECONE_INDEX_NAME="aichat-knowledge"
+PINECONE_CLOUD="aws"
+PINECONE_REGION="us-east-1"
+
+# === MongoDB ===
+MONGO_URI="mongodb://localhost:27017"
+MONGO_DB_NAME="aichat"
+
+# === Redis ===
+REDIS_HOST="localhost"
+REDIS_PORT=6379
+REDIS_DB=0
+# REDIS_PASSWORD=""
+REDIS_CACHE_TTL=3600
+
+

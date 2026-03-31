@@ -1,0 +1,119 @@
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: aichat-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - aichat-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: aichat-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - aichat-net
+
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    container_name: aichat-mcp
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MCP_SERVER_HOST=0.0.0.0
+      - MCP_SERVER_PORT=8001
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_HOST=redis
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - aichat-net
+    volumes:
+      - hf_cache:/root/.cache/huggingface
+      - ./data_storage:/app/data_storage
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: aichat-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - API_SERVER_HOST=0.0.0.0
+      - API_SERVER_PORT=8000
+      - MCP_SERVER_HOST=mcp-server
+      - MCP_SERVER_PORT=8001
+      - MCP_SERVER_URL=http://mcp-server:8001/tools/call
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_HOST=redis
+    depends_on:
+      - mcp-server
+      - mongo
+      - redis
+    networks:
+      - aichat-net
+    volumes:
+      - ./data_storage:/app/data_storage  
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: aichat-frontend
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://api-server:8000
+      - MCP_SERVER_URL=http://mcp-server:8001
+    depends_on:
+      - api-server
+    networks:
+      - aichat-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: aichat-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - api-server
+    networks:
+      - aichat-net
+
+networks:
+  aichat-net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:
+  # --- KHAI BÁO VOLUME MỚI Ở ĐÂY ---
+  hf_cache:

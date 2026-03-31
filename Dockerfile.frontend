@@ -1,0 +1,21 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Create Streamlit config
+RUN mkdir -p /root/.streamlit
+RUN echo "\\\n\
+[server]\\\n\
+headless = true\\\n\
+enableCORS = false\\\n\
+enableXsrfProtection = true\\\n\
+port = 8501\\\n\
+address = \"0.0.0.0\"\\\n\
+" > /root/.streamlit/config.toml
+
+CMD ["streamlit", "run", "frontend.py"]

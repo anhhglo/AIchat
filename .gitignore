@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+data_storage/uploaded_files/*
+data_storage/vector_index/*
+!data_storage/uploaded_files/.gitkeep
+!data_storage/vector_index/.gitkeep
+*.log
