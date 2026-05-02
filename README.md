@@ -19,7 +19,7 @@ Hệ thống AI Agent 3 tầng sử dụng **MCP Protocol**, **LangGraph**, và 
            ┌──────────────┼──────────────────────────┤
            │              │                          │
     ┌──────▼───────┐ ┌────▼─────────┐         ┌──────▼───────┐
-    │   Pinecone   │ │   MongoDB    │         │    Redis     │
+    │   chroma     │ │   MongoDB    │         │    Redis     │
     │(Vector Store)│ │  • Lịch sử   │         │  • Cache     │
     └──────────────┘ └──────────────┘         └──────────────┘
 ```
