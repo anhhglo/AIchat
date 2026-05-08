@@ -1,3 +1,5 @@
+BETA BETA !!!
+
 # AIchat - Trợ lý AI Đa Nhiệm
 
 Hệ thống AI Agent 3 tầng sử dụng **MCP Protocol**, **LangGraph**, và **Streamlit**.
