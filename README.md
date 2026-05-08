@@ -1,4 +1,4 @@
-BETA BETA !!!
+BETA BETA VESION !!!
 
 # AIchat - Trợ lý AI Đa Nhiệm
 
