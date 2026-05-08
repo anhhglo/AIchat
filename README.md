@@ -1,4 +1,5 @@
-BETA BETA VESION !!!
+BETA BETA VESION!!!
+Demo production AIchat_local_v0.11 contact: discordhieuanh@gmail.com
 
 # AIchat - Trợ lý AI Đa Nhiệm
 
